@@ -1109,9 +1109,10 @@ position: absolute;
   });
 
   function getLastDayOfMonth() {
-    const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth() + 1, 0);
-  }
+  const now = new Date();
+  // Set to midnight at the start of the 2nd day of next month
+  return new Date(now.getFullYear(), now.getMonth() + 1, 1, 23, 59, 59);
+}
 
   function updateCountdown(endDate) {
     const now = new Date();
