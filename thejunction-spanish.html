@@ -769,8 +769,7 @@ position: absolute;
       <div class="form-content">
         <h2>Mova-se Em Especial</h2>
         <p id="offerText">$699 Primeiro mês para inscrições enviadas antes MM/DD/YY</p>
-        <form action="https://formspree.io/f/mjvjordw" method="POST">
-          <input type="email" name="email (first month special) Spanish" placeholder="Introduce tu dirección de correo electrónico" required />
+        <form action="" method="POST">
           <button type="submit">Aceitar Oferta</button>
         </form>
         <div class="no-thanks">Não, obrigado, vou passar</div>
@@ -1004,7 +1003,6 @@ position: absolute;
   <!--==================== SCRIPTS ====================-->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  
 <script>
   let scrollY = 0;
 
@@ -1065,6 +1063,26 @@ position: absolute;
       const heroBottom = heroSection.getBoundingClientRect().bottom;
       siteHeader.style.opacity = heroBottom < 0 ? '0' : '1';
     });
+
+    // ✅ Add Accept Offer behavior
+    const acceptOfferBtn = document.querySelector('#moveInPopup button[type="submit"]');
+    if (acceptOfferBtn) {
+      acceptOfferBtn.addEventListener('click', (e) => {
+        e.preventDefault(); // prevent form submission
+        closePopup();
+
+        const contactForm = document.getElementById("contact-form");
+        const messageBox = contactForm?.querySelector('textarea[name="message - TX Spanish"]');
+
+        if (messageBox) {
+          messageBox.value = "ESPECIAL PRIMER MES";
+        }
+
+        if (contactForm) {
+          contactForm.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    }
   });
 
   document.querySelectorAll('.accordion-toggle').forEach(button => {
@@ -1109,10 +1127,9 @@ position: absolute;
   });
 
   function getLastDayOfMonth() {
-  const now = new Date();
-  // Set to midnight at the start of the 2nd day of next month
-  return new Date(now.getFullYear(), now.getMonth() + 1, 1, 23, 59, 59);
-}
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 1, 23, 59, 59);
+  }
 
   function updateCountdown(endDate) {
     const now = new Date();
@@ -1127,37 +1144,34 @@ position: absolute;
   }
 
   function launchConfetti() {
-  const duration = 3000;
-  const animationEnd = Date.now() + duration;
-  const defaults = {
-    startVelocity: 25,   // slower
-    spread: 180,         // less wide
-    ticks: 200,          // lasts longer
-    zIndex: 10001
-  };
+    const duration = 3000;
+    const animationEnd = Date.now() + duration;
+    const defaults = {
+      startVelocity: 25,
+      spread: 180,
+      ticks: 200,
+      zIndex: 10001
+    };
 
-  const interval = setInterval(() => {
-    const timeLeft = animationEnd - Date.now();
-    if (timeLeft <= 0) return clearInterval(interval);
+    const interval = setInterval(() => {
+      const timeLeft = animationEnd - Date.now();
+      if (timeLeft <= 0) return clearInterval(interval);
 
-    confetti(Object.assign({}, defaults, {
-      particleCount: 6 + Math.floor(Math.random() * 6),
-      origin: { x: Math.random(), y: Math.random() * 0.6 }
-    }));
-  }, 300);
-}
-
+      confetti(Object.assign({}, defaults, {
+        particleCount: 6 + Math.floor(Math.random() * 6),
+        origin: { x: Math.random(), y: Math.random() * 0.6 }
+      }));
+    }, 300);
+  }
 
   function showPopup() {
     const popup = document.getElementById("moveInPopup");
     const endDate = getLastDayOfMonth();
     const options = { month: '2-digit', day: '2-digit', year: 'numeric' };
     document.getElementById("offerText").innerHTML =
-  `<span class="highlight">$699 Primer Mes</span> para solicitudes enviadas antes <span class="popup-date">${endDate.toLocaleDateString(undefined, options)}</span>`;
+      `<span class="highlight">$699 Primer Mes</span> para solicitudes presentadas antes <span class="popup-date">${endDate.toLocaleDateString(undefined, options)}</span>`;
 
-
-
-    scrollY = window.scrollY; 
+    scrollY = window.scrollY;
     document.body.style.position = 'fixed';
     document.body.style.top = `-${scrollY}px`;
     document.body.style.left = '0';
